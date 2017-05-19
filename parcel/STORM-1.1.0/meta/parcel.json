@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "name": "STORM",
+  "version": "1.1.0",
+  "setActiveSymlink": true,
+  "depends": "CDH",
+  "replaces": "STORM",
+  "conflicts": "",
+
+  "provides": [
+    "storm"
+  ],
+
+  "scripts": {
+    "defines": "storm_env.sh"
+  },
+
+  "packages": [
+    { "name"   : "apache-storm",
+      "version": "apache-storm-1.1.0"
+    }
+  ],
+
+  "components": [
+    { "name"       : "apache-storm",
+      "version"    : "apache-storm-1.1.0",
+      "pkg_version": "1.1.0",
+      "pkg_release": "1.1.0"
+    }
+  ],
+
+  "users": {
+    "storm": {
+      "longname"    : "Apache Storm",
+      "home"        : "/var/lib/storm",
+      "shell"       : "/bin/bash",
+      "extra_groups": [ "storm" ]
+    }
+  },
+
+  "groups": [
+    "storm"
+  ]
+}
