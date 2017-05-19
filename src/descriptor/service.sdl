@@ -750,7 +750,7 @@
                 "auxConfigGenerators": [
                     {
                         "filename": "storm.yaml",
-                        "sourceFilename": "aux/storm.yaml"
+                        "sourceFilename": "auxiliary/storm.yaml"
                     }
                 ]
             }
@@ -866,7 +866,7 @@
                 "auxConfigGenerators": [
                     {
                         "filename": "storm.yaml",
-                        "sourceFilename": "aux/storm.yaml"
+                        "sourceFilename": "auxiliary/storm.yaml"
                     }
                 ]
             }

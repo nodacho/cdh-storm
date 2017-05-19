@@ -34,12 +34,12 @@ log "Reinstalling fresh storm at /tmp/storm"
 rm -rf /tmp/storm
 mkdir /tmp/storm
 cp -R $STORM_HOME/* /tmp/storm
-cp -f $CONF_DIR/aux/storm.yaml /tmp/storm/conf/
+cp -f $CONF_DIR/auxiliary/storm.yaml /tmp/storm/conf/
 chmod +x $CONF_DIR/scripts/nimbus_ui.sh
 chmod +x $CONF_DIR/scripts/supervisor_logviewer.sh
 chmod +x $CONF_DIR/scripts/generate_conf_file.sh
 
-log "Generating Configuration files (storm.yaml and cluster.xml) in /tmp/storm/{conf,logback} "
+log "Generating Configuration files (storm.yaml and cluster.xml) in /tmp/storm/{conf,log4j2} "
 $CONF_DIR/scripts/generate_conf_file.sh
 echo "" >> /tmp/storm/conf/storm.yaml
 

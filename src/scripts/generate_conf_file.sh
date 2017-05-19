@@ -89,5 +89,6 @@ echo "topology.worker.shared.thread.pool.size: $TOPOLOGY_WORKER_SHARED_THREAD_PO
 echo "topology.trident.batch.emit.interval: $TOPOLOGY_TRIDENT_BATCH_EMIT_INTERVAL" >> /tmp/storm/conf/storm.yaml
 echo "topology.testing.always.try.serialize: $TOPOLOGY_TESTING_ALWAYS_TRY_SERIALIZE" >> /tmp/storm/conf/storm.yaml
 
-# Generate logback/cluster.xml
-sed 's%STORM_LOG_DIR%/var/log/storm%g' $CONF_DIR/aux/cluster.xml  > tmp && mv tmp /tmp/storm/logback/cluster.xml
+# Generate log4j2/cluster.xml
+sed 's%STORM_LOG_DIR%/var/log/storm%g' $CONF_DIR/auxiliary/cluster.xml  > tmp && mv tmp /tmp/storm/log4j2/cluster.xml
+sed 's%STORM_LOG_DIR%/var/log/storm%g' $CONF_DIR/auxiliary/worker.xml  > tmp && mv tmp /tmp/storm/log4j2/worker.xml

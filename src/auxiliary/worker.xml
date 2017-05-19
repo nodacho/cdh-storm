@@ -19,11 +19,13 @@
 <configuration monitorInterval="60" shutdownHook="disable">
 <properties>
     <property name="pattern">%d{yyyy-MM-dd HH:mm:ss.SSS} %c{1.} %t [%p] %msg%n</property>
+    <property name="patternNoTime">%msg%n</property>
+    <property name="patternMetrics">%d %-8r %m%n</property>
 </properties>
 <appenders>
-    <RollingFile name="A1" immediateFlush="false"
-                 fileName="${sys:storm.log.dir}/${sys:logfile.name}"
-                 filePattern="${sys:storm.log.dir}/${sys:logfile.name}.%i.gz">
+    <RollingFile name="A1"
+		fileName="${sys:workers.artifacts}/${sys:storm.id}/${sys:worker.port}/${sys:logfile.name}"
+		filePattern="${sys:workers.artifacts}/${sys:storm.id}/${sys:worker.port}/${sys:logfile.name}.%i.gz">
         <PatternLayout>
             <pattern>${pattern}</pattern>
         </PatternLayout>
@@ -32,31 +34,31 @@
         </Policies>
         <DefaultRolloverStrategy max="9"/>
     </RollingFile>
-    <RollingFile name="WEB-ACCESS" immediateFlush="false"
-                 fileName="${sys:storm.log.dir}/access-web-${sys:daemon.name}.log"
-                 filePattern="${sys:storm.log.dir}/access-web-${sys:daemon.name}.log.%i.gz">
+    <RollingFile name="STDOUT"
+		fileName="${sys:workers.artifacts}/${sys:storm.id}/${sys:worker.port}/${sys:logfile.name}.out"
+		filePattern="${sys:workers.artifacts}/${sys:storm.id}/${sys:worker.port}/${sys:logfile.name}.out.%i.gz">
         <PatternLayout>
-            <pattern>${pattern}</pattern>
+            <pattern>${patternNoTime}</pattern>
         </PatternLayout>
         <Policies>
             <SizeBasedTriggeringPolicy size="100 MB"/> <!-- Or every 100 MB -->
         </Policies>
-        <DefaultRolloverStrategy max="9"/>
+        <DefaultRolloverStrategy max="4"/>
     </RollingFile>
-    <RollingFile name="THRIFT-ACCESS" immediateFlush="false"
-                 fileName="${sys:storm.log.dir}/access-${sys:logfile.name}"
-                 filePattern="${sys:storm.log.dir}/access-${sys:logfile.name}.%i.gz">
-    <PatternLayout>
-        <pattern>${pattern}</pattern>
-    </PatternLayout>
+    <RollingFile name="STDERR"
+		fileName="${sys:workers.artifacts}/${sys:storm.id}/${sys:worker.port}/${sys:logfile.name}.err"
+		filePattern="${sys:workers.artifacts}/${sys:storm.id}/${sys:worker.port}/${sys:logfile.name}.err.%i.gz">
+        <PatternLayout>
+            <pattern>${patternNoTime}</pattern>
+        </PatternLayout>
         <Policies>
             <SizeBasedTriggeringPolicy size="100 MB"/> <!-- Or every 100 MB -->
         </Policies>
-        <DefaultRolloverStrategy max="9"/>
+        <DefaultRolloverStrategy max="4"/>
     </RollingFile>
     <RollingFile name="METRICS"
-                 fileName="${sys:storm.log.dir}/${sys:logfile.name}.metrics"
-                 filePattern="${sys:storm.log.dir}/${sys:logfile.name}.metrics.%i.gz">
+		fileName="${sys:workers.artifacts}/${sys:storm.id}/${sys:worker.port}/${sys:logfile.name}.metrics"
+		filePattern="${sys:workers.artifacts}/${sys:storm.id}/${sys:worker.port}/${sys:logfile.name}.metrics.%i.gz">
         <PatternLayout>
             <pattern>${patternMetrics}</pattern>
         </PatternLayout>
@@ -66,26 +68,25 @@
         <DefaultRolloverStrategy max="9"/>
     </RollingFile>
     <Syslog name="syslog" format="RFC5424" charset="UTF-8" host="localhost" port="514"
-            protocol="UDP" appName="[${sys:daemon.name}]" mdcId="mdc" includeMDC="true"
-            facility="LOCAL5" enterpriseNumber="18060" newLine="true" exceptionPattern="%rEx{full}"
-            messageId="[${sys:user.name}:S0]" id="storm" immediateFlush="true" immediateFail="true"/>
+        protocol="UDP" appName="[${sys:storm.id}:${sys:worker.port}]" mdcId="mdc" includeMDC="true"
+        facility="LOCAL5" enterpriseNumber="18060" newLine="true" exceptionPattern="%rEx{full}"
+        messageId="[${sys:user.name}:${sys:logging.sensitivity}]" id="storm" immediateFail="true" immediateFlush="true"/>
 </appenders>
 <loggers>
-
-    <Logger name="org.apache.storm.logging.filters.AccessLoggingFilter" level="info" additivity="false">
-        <AppenderRef ref="WEB-ACCESS"/>
-        <AppenderRef ref="syslog"/>
-    </Logger>
-    <Logger name="org.apache.storm.logging.ThriftAccessLogger" level="info" additivity="false">
-        <AppenderRef ref="THRIFT-ACCESS"/>
-        <AppenderRef ref="syslog"/>
-    </Logger>
-    <Logger name="org.apache.storm.metric.LoggingClusterMetricsConsumer" level="info" additivity="false">
-        <appender-ref ref="METRICS"/>
-    </Logger>
     <root level="info"> <!-- We log everything -->
         <appender-ref ref="A1"/>
         <appender-ref ref="syslog"/>
     </root>
+    <Logger name="org.apache.storm.metric.LoggingMetricsConsumer" level="info" additivity="false">
+        <appender-ref ref="METRICS"/>
+    </Logger>
+    <Logger name="STDERR" level="INFO">
+        <appender-ref ref="STDERR"/>
+        <appender-ref ref="syslog"/>
+    </Logger>
+    <Logger name="STDOUT" level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="syslog"/>
+    </Logger>
 </loggers>
 </configuration>
