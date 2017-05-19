@@ -2,6 +2,21 @@
     "parcels": [
         {
             "replaces": "STORM",
+            "hash": "35d23283e37e523cbbf248ecd75d046d03881350",
+            "depends": "CDH",
+            "components": [
+                {
+                    "pkg_version": "1.1.0",
+                    "version": "apache-storm-1.1.0",
+                    "name": "apache-storm",
+                    "pkg_release": "1.1.0"
+                }
+            ],
+            "conflicts": "",
+            "parcelName": "STORM-1.1.0-el7.parcel"
+        },
+        {
+            "replaces": "STORM",
             "hash": "61a79324348535600e68847613ccf2608d43e8d4",
             "depends": "CDH",
             "components": [
